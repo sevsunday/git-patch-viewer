@@ -195,6 +195,11 @@ kbd {
   gap: 0.5rem;
 }
 
+.btn-ghost svg {
+  flex-shrink: 0;
+  display: block;
+}
+
 .btn-ghost:hover {
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
