@@ -78,6 +78,16 @@ const StorageManager = (() => {
   }
 
   /**
+   * Check if patch with same content already exists
+   * @param {string} patchData - Raw patch data
+   * @returns {Object|null} Existing patch entry or null
+   */
+  function findPatchByContent(patchData) {
+    const patches = getAllPatches();
+    return patches.find(p => p.data === patchData) || null;
+  }
+
+  /**
    * Delete a patch by ID
    * @param {string} id - Patch ID
    * @returns {boolean} Success status
@@ -360,6 +370,7 @@ const StorageManager = (() => {
     exportPatches,
     importPatches,
     formatPatchDate,
+    findPatchByContent,
   };
 })();
 

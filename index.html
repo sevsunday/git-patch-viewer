@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Git Patch Viewer</title>
+  <title>Git Diff & Patch Viewer</title>
   
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Git Patch Viewer">
@@ -38,7 +38,7 @@
           <line x1="16" y1="17" x2="8" y2="17"></line>
           <polyline points="10 9 9 9 8 9"></polyline>
         </svg>
-        Git Patch Viewer
+        Git Diff & Patch Viewer
       </h1>
       <button id="new-patch-btn" class="btn-ghost hidden" title="Go back">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -97,6 +97,11 @@
         </svg>
         <span id="saved-count" class="badge">0</span>
       </button>
+      <button id="save-patch-btn" class="action-btn hidden" aria-label="Save patch" title="Save this patch">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
       <button id="share-btn" class="action-btn hidden" aria-label="Share patch" title="Share this patch">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="18" cy="5" r="3"></circle>
@@ -114,7 +119,7 @@
     <!-- Input Interface (shown when no patch loaded) -->
     <section id="input-section" class="input-section">
       <div class="input-container">
-        <h2 class="input-title">Load a Git Patch</h2>
+        <h2 class="input-title">Load a Git Diff or Patch</h2>
         
         <div class="input-columns">
           <!-- Left Column: Browse/Paste -->
@@ -221,8 +226,7 @@
         <h3>Saved Patches</h3>
         <button id="close-saved-btn" class="btn-icon" aria-label="Close saved patches panel">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
         </button>
       </div>

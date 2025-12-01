@@ -111,6 +111,14 @@ const URLHandler = (() => {
   }
 
   /**
+   * Get saved patch ID from URL
+   * @returns {string|null} Saved patch ID
+   */
+  function getSavedPatchIdFromURL() {
+    return getQueryParam('savedPatchId');
+  }
+
+  /**
    * Generate permalink for a specific file and line
    * @param {string} patchData - Raw patch data
    * @param {string} filePath - File path
@@ -276,6 +284,7 @@ const URLHandler = (() => {
     getLineFromURL,
     getThemeFromURL,
     getModeFromURL,
+    getSavedPatchIdFromURL,
     updateURL,
     checkURLSafety,
     copyToClipboard,

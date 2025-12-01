@@ -231,6 +231,15 @@ kbd {
   color: var(--text-primary);
 }
 
+.action-btn.saved {
+  color: var(--accent-primary);
+}
+
+.action-btn.saved:hover {
+  color: var(--accent-primary);
+  opacity: 0.8;
+}
+
 .badge {
   position: absolute;
   top: -4px;
@@ -277,6 +286,7 @@ kbd {
   height: 16px;
   border-radius: 4px;
   border: 2px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .theme-name {
@@ -356,12 +366,26 @@ kbd {
   color: var(--accent-primary);
 }
 
-.theme-item-color {
-  width: 20px;
+.theme-item-colors {
+  display: flex;
+  gap: 2px;
+  align-items: center;
   height: 20px;
   border-radius: 4px;
-  border: 2px solid var(--border-color);
+  overflow: hidden;
   flex-shrink: 0;
+}
+
+.theme-color-box {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.theme-item:hover .theme-color-box {
+  transform: scale(1.1);
 }
 
 .theme-item-name {
@@ -414,7 +438,7 @@ kbd {
 }
 
 .input-title {
-  text-align: center;
+  text-align: left;
   font-size: 2rem;
   margin-bottom: 2rem;
   color: var(--text-primary);
@@ -1161,6 +1185,26 @@ kbd {
 
 .toast-close:hover {
   color: var(--text-primary);
+}
+
+.toast-action-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.toast-action-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.toast.save-prompt {
+  min-width: 350px;
 }
 
 .toast.success { border-left: 3px solid var(--success); }

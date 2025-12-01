@@ -5,29 +5,30 @@
 
 const ThemeManager = (() => {
   // Available themes from tweakcn.com
+  // Each theme has 4 colors: primary, secondary, accent, background
   const THEMES = [
-    { id: 'cosmic-night', name: 'Cosmic Night', color: '#a48fff', category: 'Popular' },
-    { id: 'catppuccin', name: 'Catppuccin', color: '#cba6f7', category: 'Popular' },
-    { id: 'bubblegum', name: 'Bubblegum', color: '#ff6bdc', category: 'Popular' },
-    { id: 'pastel-dreams', name: 'Pastel Dreams', color: '#b4a0ff', category: 'Popular' },
-    { id: 'cyberpunk', name: 'Cyberpunk', color: '#ff0080', category: 'Vibrant' },
-    { id: 'quantum-rose', name: 'Quantum Rose', color: '#ff4da6', category: 'Vibrant' },
-    { id: 'neon-nights', name: 'Neon Nights', color: '#00ffff', category: 'Vibrant' },
-    { id: 'nord', name: 'Nord', color: '#88c0d0', category: 'Cool' },
-    { id: 'dracula', name: 'Dracula', color: '#bd93f9', category: 'Popular' },
-    { id: 'tokyo-night', name: 'Tokyo Night', color: '#7aa2f7', category: 'Cool' },
-    { id: 'gruvbox', name: 'Gruvbox', color: '#fe8019', category: 'Warm' },
-    { id: 'monokai', name: 'Monokai', color: '#f92672', category: 'Popular' },
-    { id: 'solarized', name: 'Solarized', color: '#268bd2', category: 'Classic' },
-    { id: 'slate', name: 'Slate', color: '#38bdf8', category: 'Neutral' },
-    { id: 'zinc', name: 'Zinc', color: '#a1a1aa', category: 'Neutral' },
-    { id: 'rose', name: 'Rose Pine', color: '#ebbcba', category: 'Warm' },
-    { id: 'amethyst-haze', name: 'Amethyst Haze', color: '#9966ff', category: 'Cool' },
-    { id: 'midnight', name: 'Midnight', color: '#6080d0', category: 'Dark' },
-    { id: 'ocean', name: 'Ocean', color: '#4da6ff', category: 'Cool' },
-    { id: 'forest', name: 'Forest', color: '#4da66f', category: 'Natural' },
-    { id: 'sunset', name: 'Sunset', color: '#ff7043', category: 'Warm' },
-    { id: 'cherry-blossom', name: 'Cherry Blossom', color: '#ff99cc', category: 'Soft' },
+    { id: 'cosmic-night', name: 'Cosmic Night', colors: ['#a48fff', '#4ade80', '#60a5fa', '#1a1a25'], category: 'Popular' },
+    { id: 'catppuccin', name: 'Catppuccin', colors: ['#cba6f7', '#a6e3a1', '#89b4fa', '#11111b'], category: 'Popular' },
+    { id: 'bubblegum', name: 'Bubblegum', colors: ['#ff6bdc', '#70f0a0', '#8bb3ff', '#301a40'], category: 'Popular' },
+    { id: 'pastel-dreams', name: 'Pastel Dreams', colors: ['#b4a0ff', '#a8e0c0', '#a8c8ff', '#302840'], category: 'Popular' },
+    { id: 'cyberpunk', name: 'Cyberpunk', colors: ['#ff0080', '#00ff9f', '#00aaff', '#210e48'], category: 'Vibrant' },
+    { id: 'quantum-rose', name: 'Quantum Rose', colors: ['#ff4da6', '#66ffaa', '#66bbff', '#351630'], category: 'Vibrant' },
+    { id: 'neon-nights', name: 'Neon Nights', colors: ['#00ffff', '#00ff00', '#0088ff', '#200035'], category: 'Vibrant' },
+    { id: 'nord', name: 'Nord', colors: ['#88c0d0', '#a3be8c', '#81a1c1', '#434c5e'], category: 'Cool' },
+    { id: 'dracula', name: 'Dracula', colors: ['#bd93f9', '#50fa7b', '#8be9fd', '#191a21'], category: 'Popular' },
+    { id: 'tokyo-night', name: 'Tokyo Night', colors: ['#7aa2f7', '#9ece6a', '#7dcfff', '#24283b'], category: 'Cool' },
+    { id: 'gruvbox', name: 'Gruvbox', colors: ['#fe8019', '#b8bb26', '#83a598', '#3c3836'], category: 'Warm' },
+    { id: 'monokai', name: 'Monokai', colors: ['#f92672', '#a6e22e', '#66d9ef', '#3e3d32'], category: 'Popular' },
+    { id: 'solarized', name: 'Solarized', colors: ['#268bd2', '#859900', '#2aa198', '#0e4a59'], category: 'Classic' },
+    { id: 'slate', name: 'Slate', colors: ['#38bdf8', '#4ade80', '#60a5fa', '#334155'], category: 'Neutral' },
+    { id: 'zinc', name: 'Zinc', colors: ['#a1a1aa', '#4ade80', '#60a5fa', '#3f3f46'], category: 'Neutral' },
+    { id: 'rose', name: 'Rose Pine', colors: ['#ebbcba', '#9ccfd8', '#c4a7e7', '#26233a'], category: 'Warm' },
+    { id: 'amethyst-haze', name: 'Amethyst Haze', colors: ['#9966ff', '#66d9aa', '#6699ff', '#301a45'], category: 'Cool' },
+    { id: 'midnight', name: 'Midnight', colors: ['#6080d0', '#50c080', '#5090d0', '#1a1b2a'], category: 'Dark' },
+    { id: 'ocean', name: 'Ocean', colors: ['#4da6ff', '#4dd9c9', '#66a6ff', '#152a45'], category: 'Cool' },
+    { id: 'forest', name: 'Forest', colors: ['#4da66f', '#4dd98f', '#4d99d9', '#1a3020'], category: 'Natural' },
+    { id: 'sunset', name: 'Sunset', colors: ['#ff7043', '#66d9a0', '#668fd9', '#301a18'], category: 'Warm' },
+    { id: 'cherry-blossom', name: 'Cherry Blossom', colors: ['#ff99cc', '#99ddc0', '#99bbff', '#351830'], category: 'Soft' },
   ];
 
   const DEFAULT_THEME = 'cosmic-night';
@@ -112,7 +113,10 @@ const ThemeManager = (() => {
     const preview = themeBtn.querySelector('.theme-preview');
     const name = themeBtn.querySelector('.theme-name');
     
-    if (preview) preview.style.background = theme.color;
+    // Show single color for selected theme
+    if (preview && theme.colors) {
+      preview.style.background = theme.colors[0]; // Use primary color
+    }
     if (name) name.textContent = theme.name;
   }
 
@@ -157,9 +161,12 @@ const ThemeManager = (() => {
       html += `<div class="theme-category" data-category="${category}">`;
       themes.forEach(theme => {
         const isActive = theme.id === currentTheme ? 'active' : '';
+        const colorBoxes = theme.colors.map(color => 
+          `<span class="theme-color-box" style="background-color: ${color}"></span>`
+        ).join('');
         html += `
           <div class="theme-item ${isActive}" data-theme="${theme.id}">
-            <div class="theme-item-color" style="background-color: ${theme.color}"></div>
+            <div class="theme-item-colors">${colorBoxes}</div>
             <span class="theme-item-name">${theme.name}</span>
           </div>
         `;

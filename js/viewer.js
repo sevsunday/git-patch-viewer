@@ -7,6 +7,7 @@ const Viewer = (() => {
   // State
   let currentPatch = null;
   let currentView = 'side-by-side'; // 'unified' or 'side-by-side'
+  let currentSavedPatchId = null; // Track if current patch is saved
 
   /**
    * Initialize the viewer
@@ -29,7 +30,13 @@ const Viewer = (() => {
     // Handle URL parameters
     const urlStatus = URLHandler.handleURLOnLoad();
     
-    if (urlStatus.hasPatch) {
+    // Check if we have a saved patch ID to load
+    const savedPatchId = URLHandler.getSavedPatchIdFromURL();
+    
+    if (savedPatchId) {
+      // Load from saved patches
+      loadSavedPatchById(savedPatchId);
+    } else if (urlStatus.hasPatch) {
       // Load patch from URL
       loadPatchFromURL();
     } else {
@@ -119,6 +126,12 @@ const Viewer = (() => {
     document.getElementById('saved-btn')?.addEventListener('click', toggleSavedSidebar);
     document.getElementById('close-saved-btn')?.addEventListener('click', closeSavedSidebar);
 
+    // Close saved sidebar when clicking outside
+    document.addEventListener('click', handleClickOutsideSavedSidebar);
+
+    // Save patch button
+    document.getElementById('save-patch-btn')?.addEventListener('click', handleSavePatch);
+    
     // Share button
     document.getElementById('share-btn')?.addEventListener('click', openShareModal);
   }
@@ -327,6 +340,14 @@ const Viewer = (() => {
 
       hideLoading();
       showToast('Patch loaded successfully', 'success');
+      
+      // Update save button state
+      updateSaveButtonState();
+      
+      // Prompt to save if this is a new patch (not from saved patches)
+      if (!currentSavedPatchId) {
+        promptToSavePatch();
+      }
     } catch (error) {
       hideLoading();
       console.error('Parse error:', error);
@@ -360,8 +381,28 @@ const Viewer = (() => {
       return;
     }
 
+    // Mark this as a saved patch
+    currentSavedPatchId = patchId;
+    
+    // Update URL to include saved patch ID
+    URLHandler.updateURL({ savedPatchId: patchId });
+    
     loadPatchFromText(patch.data);
     closeSavedSidebar();
+  }
+
+  function loadSavedPatchById(patchId) {
+    const patch = StorageManager.loadPatch(patchId);
+    
+    if (!patch) {
+      showToast('Saved patch not found', 'error');
+      showInputSection();
+      return;
+    }
+
+    // Mark this as a saved patch
+    currentSavedPatchId = patchId;
+    loadPatchFromText(patch.data);
   }
 
   // ============================================
@@ -590,16 +631,19 @@ const Viewer = (() => {
     document.getElementById('input-section')?.classList.remove('hidden');
     document.getElementById('viewer-section')?.classList.add('hidden');
     document.getElementById('new-patch-btn')?.classList.add('hidden');
+    document.getElementById('save-patch-btn')?.classList.add('hidden');
     document.getElementById('share-btn')?.classList.add('hidden');
     document.getElementById('header-stats')?.classList.add('hidden');
     URLHandler.clearURL();
     currentPatch = null;
+    currentSavedPatchId = null;
   }
 
   function showViewerSection() {
     document.getElementById('input-section')?.classList.add('hidden');
     document.getElementById('viewer-section')?.classList.remove('hidden');
     document.getElementById('new-patch-btn')?.classList.remove('hidden');
+    document.getElementById('save-patch-btn')?.classList.remove('hidden');
     document.getElementById('share-btn')?.classList.remove('hidden');
   }
 
@@ -677,7 +721,8 @@ const Viewer = (() => {
     });
   }
 
-  function toggleSavedSidebar() {
+  function toggleSavedSidebar(e) {
+    if (e) e.stopPropagation(); // Prevent event from bubbling to document
     const sidebar = document.getElementById('saved-sidebar');
     if (!sidebar) return;
 
@@ -690,6 +735,21 @@ const Viewer = (() => {
 
   function closeSavedSidebar() {
     document.getElementById('saved-sidebar')?.classList.add('hidden');
+  }
+
+  function handleClickOutsideSavedSidebar(e) {
+    const sidebar = document.getElementById('saved-sidebar');
+    const savedBtn = document.getElementById('saved-btn');
+    
+    // Check if sidebar is visible
+    if (!sidebar || sidebar.classList.contains('hidden')) {
+      return;
+    }
+    
+    // Check if click is outside sidebar and not on the button that opens it
+    if (!sidebar.contains(e.target) && !savedBtn?.contains(e.target)) {
+      closeSavedSidebar();
+    }
   }
 
   function renderSavedPatches() {
@@ -751,6 +811,114 @@ const Viewer = (() => {
     if (badge) {
       badge.textContent = count;
       badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+  }
+
+  // ============================================
+  // Save Patch Functions
+  // ============================================
+
+  function handleSavePatch() {
+    if (!currentPatch) return;
+    
+    // If already saved, offer to save as new
+    if (currentSavedPatchId) {
+      const result = confirm('This patch is already saved. Save as a new copy?');
+      if (!result) return;
+      
+      // Clear the ID to save as new
+      currentSavedPatchId = null;
+    }
+    
+    savePatchToStorage();
+  }
+
+  function savePatchToStorage() {
+    if (!currentPatch) return;
+    
+    try {
+      const saved = StorageManager.savePatch(currentPatch);
+      if (saved) {
+        currentSavedPatchId = saved.id;
+        
+        // Update URL with saved patch ID
+        URLHandler.updateURL({ savedPatchId: saved.id });
+        
+        showToast('Patch saved successfully', 'success');
+        updateSavedPatchesCount();
+        updateSaveButtonState();
+        displayRecentPatches();
+      }
+    } catch (error) {
+      showToast('Failed to save patch: ' + error.message, 'error');
+    }
+  }
+
+  function promptToSavePatch() {
+    // Check if patch already exists in storage
+    if (currentPatch) {
+      const existingPatch = StorageManager.findPatchByContent(currentPatch.raw);
+      if (existingPatch) {
+        // Patch already saved, just set the ID
+        currentSavedPatchId = existingPatch.id;
+        updateSaveButtonState();
+        return;
+      }
+    }
+    
+    // Show a toast with action button to save
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast info save-prompt';
+    
+    toast.innerHTML = `
+      <svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <div class="toast-message">Would you like to save this patch?</div>
+      <button class="toast-action-btn">Save</button>
+      <button class="toast-close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Save button action
+    toast.querySelector('.toast-action-btn').addEventListener('click', () => {
+      savePatchToStorage();
+      toast.remove();
+    });
+
+    // Close button
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+      toast.remove();
+    });
+
+    // Auto-dismiss after 10 seconds
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 10000);
+  }
+
+  function updateSaveButtonState() {
+    const saveBtn = document.getElementById('save-patch-btn');
+    if (!saveBtn) return;
+    
+    if (currentSavedPatchId) {
+      // Patch is already saved
+      saveBtn.title = 'Save as new copy';
+      saveBtn.classList.add('saved');
+    } else {
+      // Patch is not saved
+      saveBtn.title = 'Save this patch';
+      saveBtn.classList.remove('saved');
     }
   }
 
