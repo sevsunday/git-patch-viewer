@@ -193,11 +193,11 @@ const Viewer = (() => {
       });
     });
 
-    // Close modal on backdrop click
+    // Close modal on backdrop click (except for patch-exists-modal which handles its own)
     document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
       backdrop.addEventListener('click', (e) => {
         const modal = e.target.closest('.modal');
-        if (modal) {
+        if (modal && modal.id !== 'patch-exists-modal') {
           modal.classList.add('hidden');
         }
       });
@@ -384,13 +384,20 @@ const Viewer = (() => {
       hideLoading();
       showToast('Patch loaded successfully', 'success');
       
+      // Check if this patch already exists in saved patches (if not already loaded from saved patches)
+      if (!currentSavedPatchId) {
+        const existingPatch = StorageManager.findPatchByContent(currentPatch.raw);
+        if (existingPatch) {
+          // Patch already exists - show options
+          showPatchAlreadySavedPrompt(existingPatch);
+        } else {
+          // New patch - prompt to save
+          promptToSavePatch();
+        }
+      }
+      
       // Update save button state
       updateSaveButtonState();
-      
-      // Prompt to save if this is a new patch (not from saved patches)
-      if (!currentSavedPatchId) {
-        promptToSavePatch();
-      }
     } catch (error) {
       hideLoading();
       console.error('Parse error:', error);
@@ -1099,18 +1106,46 @@ const Viewer = (() => {
     }
   }
 
+  function showPatchAlreadySavedPrompt(existingPatch) {
+    const modal = document.getElementById('patch-exists-modal');
+    if (!modal) return;
+
+    // Show modal
+    modal.classList.remove('hidden');
+
+    // Set up event listeners (remove any existing ones first)
+    const loadBtn = document.getElementById('load-existing-patch-btn');
+    const saveNewBtn = document.getElementById('save-new-copy-btn');
+    const backdrop = modal.querySelector('.modal-backdrop');
+
+    // Clone and replace to remove old event listeners
+    const newLoadBtn = loadBtn.cloneNode(true);
+    const newSaveNewBtn = saveNewBtn.cloneNode(true);
+    loadBtn.parentNode.replaceChild(newLoadBtn, loadBtn);
+    saveNewBtn.parentNode.replaceChild(newSaveNewBtn, saveNewBtn);
+
+    // Load saved patch
+    newLoadBtn.addEventListener('click', () => {
+      currentSavedPatchId = existingPatch.id;
+      updateSaveButtonState();
+      URLHandler.updateURL({ savedPatchId: existingPatch.id });
+      modal.classList.add('hidden');
+      showToast('Loaded saved patch', 'success');
+    });
+
+    // Save new copy
+    newSaveNewBtn.addEventListener('click', () => {
+      savePatchToStorage();
+      modal.classList.add('hidden');
+    });
+
+    // Close on backdrop click
+    backdrop.addEventListener('click', () => {
+      modal.classList.add('hidden');
+    });
+  }
+
   function promptToSavePatch() {
-    // Check if patch already exists in storage
-    if (currentPatch) {
-      const existingPatch = StorageManager.findPatchByContent(currentPatch.raw);
-      if (existingPatch) {
-        // Patch already saved, just set the ID
-        currentSavedPatchId = existingPatch.id;
-        updateSaveButtonState();
-        return;
-      }
-    }
-    
     // Show a toast with action button to save
     const container = document.getElementById('toast-container');
     if (!container) return;

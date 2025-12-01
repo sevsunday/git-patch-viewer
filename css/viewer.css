@@ -1260,6 +1260,10 @@ kbd {
   animation: slideUp 0.3s ease;
 }
 
+.modal-content.modal-compact {
+  max-width: 500px;
+}
+
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -1282,6 +1286,28 @@ kbd {
 .modal-header h2 {
   font-size: 1.5rem;
   color: var(--text-primary);
+}
+
+.modal-header svg {
+  flex-shrink: 0;
+}
+
+.modal-message {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: column;
+}
+
+.modal-actions button {
+  width: 100%;
+  justify-content: center;
 }
 
 .modal-body {
@@ -1449,6 +1475,12 @@ kbd {
 
 .toast.save-prompt {
   min-width: 350px;
+}
+
+.toast.save-prompt .load-saved-btn,
+.toast.save-prompt .save-new-btn {
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .toast.success { border-left: 3px solid var(--success); }

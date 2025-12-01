@@ -326,6 +326,38 @@
     </div>
   </div>
 
+  <!-- Patch Already Saved Modal -->
+  <div id="patch-exists-modal" class="modal hidden" role="dialog" aria-labelledby="patch-exists-title" aria-modal="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-compact">
+      <div class="modal-header">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" style="color: var(--accent-primary);">
+          <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <h2 id="patch-exists-title">This Patch is Already Saved</h2>
+      </div>
+      <div class="modal-body">
+        <p class="modal-message">You've previously saved this patch. Would you like to load the saved version or save a new copy?</p>
+        <div class="modal-actions">
+          <button id="load-existing-patch-btn" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            Load Saved Patch
+          </button>
+          <button id="save-new-copy-btn" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            Save New Copy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Keyboard Help Modal -->
   <div id="help-modal" class="modal hidden" role="dialog" aria-labelledby="help-modal-title" aria-modal="true">
     <div class="modal-backdrop"></div>
