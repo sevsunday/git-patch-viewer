@@ -129,14 +129,22 @@ const Viewer = (() => {
 
     // Expand/collapse all files
     document.getElementById('expand-all-files')?.addEventListener('click', () => {
-      document.querySelectorAll('.d2h-file-wrapper').forEach(file => {
-        file.classList.remove('d2h-file-collapsed');
+      // Click all checked "viewed" checkboxes to expand files
+      const checkboxes = document.querySelectorAll('.d2h-file-collapse input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          checkbox.click();
+        }
       });
     });
 
     document.getElementById('collapse-all-files')?.addEventListener('click', () => {
-      document.querySelectorAll('.d2h-file-wrapper').forEach(file => {
-        file.classList.add('d2h-file-collapsed');
+      // Click all unchecked "viewed" checkboxes to collapse files
+      const checkboxes = document.querySelectorAll('.d2h-file-collapse input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        if (!checkbox.checked) {
+          checkbox.click();
+        }
       });
     });
 
