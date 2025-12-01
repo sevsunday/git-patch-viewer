@@ -1085,18 +1085,41 @@ kbd {
    Add your custom styles below this line
    ============================================ */
 
-/* Example: Uncomment to customize file wrappers
+/* Match diff2html backgrounds to theme */
+.d2h-wrapper {
+  background-color: var(--bg-primary) !important;
+}
+
 .d2h-file-wrapper {
+  background-color: var(--bg-secondary) !important;
   margin-bottom: 1.5rem !important;
   border-radius: 8px !important;
+  border: 1px solid var(--border-color) !important;
 }
-*/
 
-/* Example: Uncomment to customize line numbers
-.d2h-code-linenumber {
-  opacity: 0.5 !important;
+.d2h-file-header {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
-*/
+
+.d2h-diff-table {
+  background-color: var(--bg-primary) !important;
+}
+
+.d2h-code-side-linenumber,
+.d2h-code-linenumber {
+  background-color: var(--bg-tertiary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.d2h-emptyplaceholder {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* File list background if shown */
+.d2h-file-list-wrapper {
+  background-color: var(--bg-secondary) !important;
+}
 
 /* ============================================
    SAVED SIDEBAR
