@@ -15,7 +15,6 @@ A client-side git patch and diff viewer with syntax highlighting and theming. Vi
 ## Technology Stack
 
 ### Dependencies
-- **[Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)** - Utility-first styling
 - **[diff2html](https://github.com/rtfpessoa/diff2html)** - Classic diff rendering
 - **[React 18](https://github.com/facebook/react)** + **[react-diff-viewer](https://github.com/praneshr/react-diff-viewer)** - Modern diff viewer
 - **[Prism.js](https://github.com/PrismJS/prism)** - Syntax highlighting (20+ languages)

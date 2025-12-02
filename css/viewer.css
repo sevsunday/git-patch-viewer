@@ -1102,11 +1102,10 @@ kbd {
 }
 
 /* ============================================
-   DIFF2HTML - Let it use its own styles
-   Only prevent Tailwind interference
+   DIFF2HTML INTEGRATION
    ============================================ */
 
-/* No interference - let diff2html use its default styles */
+/* Let diff2html use its default styles */
 
 /* ============================================
    CUSTOM DIFF2HTML STYLES
