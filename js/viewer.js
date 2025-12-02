@@ -14,6 +14,7 @@ const Viewer = (() => {
   let folderStates = {}; // Track expanded/collapsed folders
   let filesSearchQuery = ''; // Current search query
   let sidebarCollapsed = false; // Track sidebar collapsed state
+  let isFullscreenMode = false; // Track fullscreen mode state
 
   /**
    * Initialize the viewer
@@ -214,6 +215,9 @@ const Viewer = (() => {
 
     // Close settings dropdown when clicking outside
     document.addEventListener('click', handleClickOutsideFilesSettings);
+
+    // Fullscreen button
+    document.getElementById('fullscreen-btn')?.addEventListener('click', toggleFullscreenMode);
   }
 
   /**
@@ -283,6 +287,10 @@ const Viewer = (() => {
           
         case 'Escape':
           e.preventDefault();
+          // Exit fullscreen if active
+          if (isFullscreenMode) {
+            toggleFullscreenMode();
+          }
           // Close modals
           document.querySelectorAll('.modal:not(.hidden)').forEach(modal => {
             modal.classList.add('hidden');
@@ -317,6 +325,17 @@ const Viewer = (() => {
         case 'C':
           e.preventDefault();
           handleCopyAll();
+          break;
+
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          toggleFullscreenMode();
+          break;
+
+        case 'F11':
+          e.preventDefault();
+          toggleFullscreenMode();
           break;
       }
     });
@@ -1654,6 +1673,50 @@ const Viewer = (() => {
     const sidebar = document.getElementById('file-sidebar');
     if (sidebar) {
       sidebar.classList.remove('hovered');
+    }
+  }
+
+  // ============================================
+  // Fullscreen Mode
+  // ============================================
+
+  function toggleFullscreenMode() {
+    isFullscreenMode = !isFullscreenMode;
+    
+    const viewerSection = document.getElementById('viewer-section');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const body = document.body;
+    
+    if (isFullscreenMode) {
+      // Enter fullscreen mode
+      viewerSection?.classList.add('fullscreen-mode');
+      body?.classList.add('fullscreen-active');
+      fullscreenBtn?.classList.add('active');
+      
+      // Update button text
+      const btnText = fullscreenBtn?.querySelector('.fullscreen-text');
+      if (btnText) btnText.textContent = 'Exit Fullscreen';
+      
+      // Update button icon to exit fullscreen icon (minimize/compress)
+      const btnIcon = fullscreenBtn?.querySelector('svg');
+      if (btnIcon) {
+        btnIcon.innerHTML = '<polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="14" y1="10" x2="21" y2="3"></line><line x1="3" y1="21" x2="10" y2="14"></line>';
+      }
+    } else {
+      // Exit fullscreen mode
+      viewerSection?.classList.remove('fullscreen-mode');
+      body?.classList.remove('fullscreen-active');
+      fullscreenBtn?.classList.remove('active');
+      
+      // Update button text
+      const btnText = fullscreenBtn?.querySelector('.fullscreen-text');
+      if (btnText) btnText.textContent = 'Fullscreen';
+      
+      // Update button icon to enter fullscreen icon
+      const btnIcon = fullscreenBtn?.querySelector('svg');
+      if (btnIcon) {
+        btnIcon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>';
+      }
     }
   }
 

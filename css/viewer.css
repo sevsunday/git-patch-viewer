@@ -1658,6 +1658,11 @@ kbd {
 }
 
 @media (max-width: 768px) {
+  /* Hide fullscreen button text on mobile */
+  #fullscreen-btn .fullscreen-text {
+    display: none;
+  }
+  
   .app-header {
     padding: 1rem;
     flex-wrap: wrap;
@@ -1820,6 +1825,57 @@ body.viewer-mode .clicky-affiliate-btn {
     left: 1rem;
     right: auto;
   }
+}
+
+/* ============================================
+   FULLSCREEN MODE
+   ============================================ */
+.viewer-section.fullscreen-mode {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--bg-primary);
+}
+
+.viewer-section.fullscreen-mode .metadata-card {
+  display: none;
+}
+
+.viewer-section.fullscreen-mode .file-sidebar {
+  display: none;
+}
+
+.viewer-section.fullscreen-mode .viewer-layout {
+  height: 100vh;
+}
+
+.viewer-section.fullscreen-mode .diff-wrapper {
+  width: 100%;
+}
+
+.viewer-section.fullscreen-mode .diff-controls {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Hide app header when in fullscreen mode */
+body.fullscreen-active .app-header {
+  display: none;
+}
+
+/* Adjust main content when in fullscreen */
+body.fullscreen-active .app-main {
+  height: 100vh;
+}
+
+/* Fullscreen button icon swap */
+#fullscreen-btn.active svg {
+  transform: rotate(0deg);
+}
+
+#fullscreen-btn.active svg path {
+  d: path("M5 8h6M3 3l3 3m0 0 3-3M6 6v6m8 0h6m-3 3 3-3m0 0-3-3m3 3v6");
 }
 
 /* ============================================
