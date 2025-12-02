@@ -152,6 +152,7 @@ kbd {
   padding: 0.5rem 1.25rem;
   background-color: var(--accent-primary);
   color: var(--bg-primary);
+  border: 1px solid transparent;
   border-radius: 6px;
   font-weight: 500;
   display: flex;

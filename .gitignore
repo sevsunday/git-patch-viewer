@@ -7,3 +7,6 @@ big.patch
 COMPRESSION_IMPROVEMENTS.md
 TWEAKCN_BOILERPLATE_BUILD_PLAN.md
 /.cursor/plans
+/node_modules
+/scripts
+THEME_GENERATION.md
