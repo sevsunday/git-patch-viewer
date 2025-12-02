@@ -57,12 +57,14 @@ window.ReactDiffAdapter = (() => {
     };
 
     // Map theme colors to react-diff-viewer style variables
-    const addedBg = getCSSVar('--diff-added-bg') || (isDarkMode ? '#044B53' : '#e6ffed');
-    const removedBg = getCSSVar('--diff-removed-bg') || (isDarkMode ? '#632F34' : '#ffeef0');
-    const addedWordBg = getCSSVar('--diff-added-word-bg') || (isDarkMode ? '#055d67' : '#acf2bd');
-    const removedWordBg = getCSSVar('--diff-removed-word-bg') || (isDarkMode ? '#7d383f' : '#fdb8c0');
+    const addedBg = getCSSVar('--diff-added-bg') || (isDarkMode ? 'rgba(74, 222, 128, 0.15)' : 'rgba(34, 197, 94, 0.1)');
+    const removedBg = getCSSVar('--diff-removed-bg') || (isDarkMode ? 'rgba(248, 113, 113, 0.15)' : 'rgba(239, 68, 68, 0.1)');
+    const addedWordBg = getCSSVar('--diff-added-word-bg') || (isDarkMode ? 'rgba(74, 222, 128, 0.3)' : 'rgba(34, 197, 94, 0.25)');
+    const removedWordBg = getCSSVar('--diff-removed-word-bg') || (isDarkMode ? 'rgba(248, 113, 113, 0.3)' : 'rgba(239, 68, 68, 0.25)');
     const bgColor = getCSSVar('--bg-primary') || (isDarkMode ? '#2e303c' : '#fff');
     const textColor = getCSSVar('--text-primary') || (isDarkMode ? '#FFF' : '#212529');
+    const textSecondary = getCSSVar('--text-secondary') || (isDarkMode ? '#b4b7c9' : '#6c757d');
+    const accentColor = getCSSVar('--accent-primary') || (isDarkMode ? '#a48fff' : '#7c3aed');
 
     const styles = {
       variables: {
@@ -77,11 +79,11 @@ window.ReactDiffAdapter = (() => {
           wordRemovedBackground: removedWordBg,
           addedGutterBackground: addedBg,
           removedGutterBackground: removedBg,
-          gutterBackground: isDarkMode ? '#2c2f3a' : '#f7f7f7',
-          gutterBackgroundDark: isDarkMode ? '#262933' : '#f3f1f1',
-          gutterColor: textColor,
-          addedGutterColor: textColor,
-          removedGutterColor: textColor,
+          gutterBackground: getCSSVar('--bg-secondary') || (isDarkMode ? '#2c2f3a' : '#f7f7f7'),
+          gutterBackgroundDark: getCSSVar('--bg-tertiary') || (isDarkMode ? '#262933' : '#f3f1f1'),
+          gutterColor: textSecondary,
+          addedGutterColor: textSecondary,
+          removedGutterColor: textSecondary,
         },
         dark: {
           diffViewerBackground: bgColor,
@@ -94,16 +96,28 @@ window.ReactDiffAdapter = (() => {
           wordRemovedBackground: removedWordBg,
           addedGutterBackground: addedBg,
           removedGutterBackground: removedBg,
-          gutterBackground: '#2c2f3a',
-          gutterBackgroundDark: '#262933',
-          gutterColor: '#464c67',
-          addedGutterColor: '#8c8c8c',
-          removedGutterColor: '#8c8c8c',
+          gutterBackground: getCSSVar('--bg-secondary') || '#2c2f3a',
+          gutterBackgroundDark: getCSSVar('--bg-tertiary') || '#262933',
+          gutterColor: textSecondary,
+          addedGutterColor: textSecondary,
+          removedGutterColor: textSecondary,
         }
       },
       diffContainer: {
         fontSize: '14px',
         fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace'
+      },
+      line: {
+        fontSize: '14px',
+        fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace'
+      },
+      titleBlock: {
+        background: getCSSVar('--bg-secondary') || (isDarkMode ? '#2c2f3a' : '#f7f7f7'),
+        padding: '10px',
+        fontWeight: '600',
+        fontSize: '14px',
+        color: accentColor,
+        borderBottom: `2px solid ${accentColor}`
       }
     };
 
